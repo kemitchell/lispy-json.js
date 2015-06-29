@@ -48,4 +48,17 @@ require('tape')(function(test) {
       '    "b": 1 } }'].join('\n'),
     'properly serializes nested objects')
 
+  test.equal(
+    format({ a: [ { b: 1 } ], c: 2 }),
+    [ '{ "a": [',
+      '    { "b": 1 } ],',
+      '  "c": 2 }' ].join('\n'),
+    'properly serializes objects in arrays')
+
+  test.equal(
+    format([ [ 1, 2 ] ]),
+    [ '[ [ 1,',
+      '    2 ] ]' ].join('\n'),
+    'properly serializes arrays in arrays')
+
   test.end() })

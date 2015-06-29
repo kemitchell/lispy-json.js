@@ -17,7 +17,7 @@
 function indentation(level) {
   return new Array((level * 2) + 1).join(' ') }
 
-function lispyJSON(level, value) {
+function lispyJSON(level, flush, value) {
   var type = typeof value
   if (type === 'string') {
     return JSON.stringify(value) }
@@ -32,32 +32,31 @@ function lispyJSON(level, value) {
       var indentationSpaces
       if (Array.isArray(value)) {
         var stringifiedElements = value.map(function(element) {
-          return lispyJSON(level + 1, element) || 'null' })
+          return lispyJSON(level + 1, true, element) || 'null' })
         if (stringifiedElements.length === 0) {
           return '[ ]' }
         else {
           indentationSpaces = indentation(level + 1)
           return (
             '[' +
-            (level === 0 ? ' ' : '\n' + indentationSpaces) +
+            (flush ? ' ' : '\n' + indentationSpaces) +
             stringifiedElements.join(',\n' + indentationSpaces) + 
             ' ]' ) } }
       else { // object
         var properties = new Array
         for (var key in value) {
           if (value.hasOwnProperty(key)) {
-            var stringifiedValue = lispyJSON(level + 1, value[key])
+            var stringifiedValue = lispyJSON(level + 1, false, value[key])
             if (stringifiedValue) {
               properties.push(
                 JSON.stringify(key) + ': ' + stringifiedValue) } } }
         if (properties.length === 0) {
           return '{ }' }
         else {
-          indentationSpaces = indentation(level + 1)
           return (
             '{' +
-            (level === 0 ? ' ' : '\n' + indentationSpaces) +
-            properties.join(',\n' + indentationSpaces) +
+            (flush ? ' ' : '\n' + indentation(level + (flush ? 2 : 1))) +
+            properties.join(',\n' + indentation(level + 1)) +
             ' }' ) } } } } }
 
-module.exports = lispyJSON.bind(this, 0)
+module.exports = lispyJSON.bind(this, 0, true)
