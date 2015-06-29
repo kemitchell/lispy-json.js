@@ -1,0 +1,15 @@
+{
+  "name": "lispy-json",
+  "description": "Lispy style JSON serialization",
+  "version": "0.0.0",
+  "author": "Kyle E. Mitchell <kyle@kemitchell.com> (https://kemitchell.com/)",
+  "bin": "command-line-interface.js",
+  "devDependencies": {
+    "tape": "4.x"
+  },
+  "license": "Apache-2.0",
+  "repository": "kemitchell/lispy-json.js",
+  "scripts": {
+    "test": "tape test.js"
+  }
+}
