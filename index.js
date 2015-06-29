@@ -14,49 +14,48 @@
  * permissions and limitations under the License.
 */
 
-function indentation(level) {
-  return new Array((level * 2) + 1).join(' ') }
+function indent(depth) {
+  return new Array((depth * 2) + 1).join(' ') }
 
-function lispyJSON(level, flush, value) {
-  var type = typeof value
+function lispyJSON(depth, flush, argument) {
+  var type = typeof argument
   if (type === 'string') {
-    return JSON.stringify(value) }
+    return JSON.stringify(argument) }
   else if (type === 'number') {
-    return isFinite(value) ? String(value) : 'null' }
+    return isFinite(argument) ? String(argument) : 'null' }
   else if (type === 'boolean') {
-    return value ? 'true' : 'false' }
+    return argument ? 'true' : 'false' }
   else if (type === 'object') {
-    if (!value) {
+    if (!argument) {
       return 'null' }
     else {
-      var indentationSpaces
-      if (Array.isArray(value)) {
-        var stringifiedElements = value.map(function(element) {
-          return lispyJSON(level + 1, true, element) || 'null' })
+      if (Array.isArray(argument)) {
+        var stringifiedElements = argument.map(function(element) {
+          return lispyJSON(depth + 1, true, element) || 'null' })
         if (stringifiedElements.length === 0) {
           return '[ ]' }
         else {
-          indentationSpaces = indentation(level + 1)
+          var spaces = indent(depth + 1)
           return (
             '[' +
-            (flush ? ' ' : '\n' + indentationSpaces) +
-            stringifiedElements.join(',\n' + indentationSpaces) + 
+            (flush ? ' ' : '\n' + spaces) +
+            stringifiedElements.join(',\n' + spaces) + 
             ' ]' ) } }
       else { // object
         var properties = new Array
-        for (var key in value) {
-          if (value.hasOwnProperty(key)) {
-            var stringifiedValue = lispyJSON(level + 1, false, value[key])
-            if (stringifiedValue) {
-              properties.push(
-                JSON.stringify(key) + ': ' + stringifiedValue) } } }
+        for (var key in argument) {
+          if (argument.hasOwnProperty(key)) {
+            var value = lispyJSON(
+              depth + 1, false, argument[key])
+            if (value) {
+              properties.push(JSON.stringify(key) + ': ' + value) } } }
         if (properties.length === 0) {
           return '{ }' }
         else {
           return (
             '{' +
-            (flush ? ' ' : '\n' + indentation(level + (flush ? 2 : 1))) +
-            properties.join(',\n' + indentation(level + 1)) +
+            (flush ? ' ' : '\n' + indent(depth + (flush ? 2 : 1))) +
+            properties.join(',\n' + indent(depth + 1)) +
             ' }' ) } } } } }
 
 module.exports = lispyJSON.bind(this, 0, true)
