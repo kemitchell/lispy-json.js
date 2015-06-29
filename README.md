@@ -1,6 +1,6 @@
 At the command line:
 
-```bash
+```shellsession
 $ npm install --global lispy-json
 $ lispy-json < example.json
 { "glossary": {
