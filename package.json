@@ -7,6 +7,16 @@
   "devDependencies": {
     "tape": "4.x"
   },
+  "keywords": [
+    "command",
+    "filter",
+    "format",
+    "indent",
+    "json",
+    "pretty",
+    "serialization",
+    "shell"
+  ],
   "license": "Apache-2.0",
   "repository": "kemitchell/lispy-json.js",
   "scripts": {
