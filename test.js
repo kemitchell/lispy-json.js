@@ -3,15 +3,15 @@ var format = require('./')
 require('tape')(function(test) {
 
   test.equal(
-    format(new Object), '{ }',
+    format({}), '{ }',
     'serializes an empty object with space')
 
   test.equal(
-    format(new Array), '[ ]',
+    format([]), '[ ]',
     'serializes an empty array with space')
 
   test.equal(
-    format(""), '""',
+    format(''), '""',
     'serializes an empty string')
 
   test.equal(
