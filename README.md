@@ -25,7 +25,7 @@ $ lispy-json < example.json
 In JavaScript, via [npm](https://npmjs.com):
 
 ```javascript
-var format = require('lispy-json')
+var stringify = require('lispy-json')
 
-console.log(format({ an: 'object' }))
+console.log(stringify({ an: 'object' }))
 ```
