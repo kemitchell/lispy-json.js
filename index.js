@@ -46,10 +46,6 @@ function lispyJSON(depth, flush, argument, MAX_WIDTH) {
           return '[ ]' }
         else {
           var leadingSpaces = indent(depth + 1)
-          var cannotWrap = stringifiedElements.some(function(element) {
-            return leadingSpaces.length + element.length + 2 > MAX_WIDTH })
-          if (cannotWrap) {
-            MAX_WIDTH = Infinity }
           if (isArrayOfScalars(argument)) {
             var lastStringified = stringifiedElements.length - 1
             var rows = stringifiedElements
