@@ -26,9 +26,8 @@ function isArrayOfScalars(array) {
       type === 'boolean' ||
       element === null ) }) }
 
-var MAX_WIDTH = 72
-
-function lispyJSON(depth, flush, argument) {
+function lispyJSON(depth, flush, argument, MAX_WIDTH) {
+  MAX_WIDTH = MAX_WIDTH || 72
   var type = typeof argument
   if (type === 'string') {
     return JSON.stringify(argument) }
@@ -42,7 +41,7 @@ function lispyJSON(depth, flush, argument) {
     else {
       if (Array.isArray(argument)) {
         var stringifiedElements = argument.map(function(element) {
-          return lispyJSON(depth + 1, true, element) || 'null' })
+          return lispyJSON(depth + 1, true, element, MAX_WIDTH) || 'null' })
         if (stringifiedElements.length === 0) {
           return '[ ]' }
         else {
@@ -80,7 +79,7 @@ function lispyJSON(depth, flush, argument) {
         for (var key in argument) {
           if (argument.hasOwnProperty(key)) {
             var value = lispyJSON(
-              depth + 1, false, argument[key])
+              depth + 1, false, argument[key], MAX_WIDTH)
             if (value) {
               properties.push(JSON.stringify(key) + ': ' + value) } } }
         if (properties.length === 0) {
