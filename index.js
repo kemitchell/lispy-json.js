@@ -17,6 +17,15 @@
 function indent(depth) {
   return new Array((depth * 2) + 1).join(' ') }
 
+function isArrayOfScalars(array) {
+  return array.every(function(element) {
+    var type = typeof element
+    return (
+      type === 'string' ||
+      type === 'number' ||
+      type === 'boolean' ||
+      element === null ) }) }
+
 function lispyJSON(depth, flush, argument) {
   var type = typeof argument
   if (type === 'string') {
@@ -35,12 +44,17 @@ function lispyJSON(depth, flush, argument) {
         if (stringifiedElements.length === 0) {
           return '[ ]' }
         else {
-          var spaces = indent(depth + 1)
-          return (
-            '[' +
-            (flush ? ' ' : '\n' + spaces) +
-            stringifiedElements.join(',\n' + spaces) + 
-            ' ]' ) } }
+
+          if (isArrayOfScalars(argument)) {
+            return (
+              '[ ' + stringifiedElements.join(', ')  + ' ]' ) }
+          else {
+            var spaces = indent(depth + 1)
+            return (
+              '[' +
+              (flush ? ' ' : '\n' + spaces) +
+              stringifiedElements.join(',\n' + spaces) + 
+              ' ]' ) } } }
       else { // object
         var properties = new Array
         for (var key in argument) {

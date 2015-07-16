@@ -37,10 +37,8 @@ require('tape')(function(test) {
 
   test.equal(
     format({ a: [ 1, 2 ] }),
-    [ '{ "a": [',
-      '    1,',
-      '    2 ] }' ].join('\n'),
-    'properly serializes array withihn object')
+    [ '{ "a": [ 1, 2 ] }' ].join('\n'),
+    'properly serializes array within object')
 
   test.equal(
     format({ a: { b: 1 } }),
@@ -56,9 +54,8 @@ require('tape')(function(test) {
     'properly serializes objects in arrays')
 
   test.equal(
-    format([ [ 1, 2 ] ]),
-    [ '[ [ 1,',
-      '    2 ] ]' ].join('\n'),
-    'properly serializes arrays in arrays')
+    format([ [ 'a', 1, true, null ] ]),
+    [ '[ [ "a", 1, true, null ] ]' ].join('\n'),
+    'inlines arrays of scalar values')
 
   test.end() })
