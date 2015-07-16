@@ -26,6 +26,8 @@ function isArrayOfScalars(array) {
       type === 'boolean' ||
       element === null ) }) }
 
+var MAX_WIDTH = 72
+
 function lispyJSON(depth, flush, argument) {
   var type = typeof argument
   if (type === 'string') {
@@ -44,16 +46,34 @@ function lispyJSON(depth, flush, argument) {
         if (stringifiedElements.length === 0) {
           return '[ ]' }
         else {
-
+          var leadingSpaces = indent(depth + 1)
           if (isArrayOfScalars(argument)) {
+            var lastStringified = stringifiedElements.length - 1
+            var rows = stringifiedElements
+              .reduce(function(rows, stringified, stringifiedIndex) {
+                var lastRowIndex = rows.length - 1
+                var lastRow = rows[lastRowIndex]
+                var isLast = stringifiedIndex === lastStringified
+                var comma = (isLast ? '' : ',')
+                var additionalLength = stringified.length + comma.length + 1
+                if (leadingSpaces.length + lastRow.length + additionalLength > MAX_WIDTH) {
+                  rows.push(' ' + stringified + comma) }
+                else {
+                  rows[lastRowIndex] = (
+                    lastRow + ( lastRow.length > 0 ? ' ' : '' ) + stringified + comma )}
+                return rows
+              }, [''])
             return (
-              '[ ' + stringifiedElements.join(', ')  + ' ]' ) }
+              '[ ' +
+              rows
+                .map(function(x) { return x.trim() })
+                .join('\n' + leadingSpaces) +
+              ' ]' ) }
           else {
-            var spaces = indent(depth + 1)
             return (
               '[' +
-              (flush ? ' ' : '\n' + spaces) +
-              stringifiedElements.join(',\n' + spaces) + 
+              (flush ? ' ' : '\n' + leadingSpaces) +
+              stringifiedElements.join(',\n' + leadingSpaces) + 
               ' ]' ) } } }
       else { // object
         var properties = new Array

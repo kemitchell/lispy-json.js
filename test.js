@@ -58,4 +58,15 @@ require('tape')(function(test) {
     [ '[ [ "a", 1, true, null ] ]' ].join('\n'),
     'inlines arrays of scalar values')
 
+  test.equal(
+    format([ [ 'alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta',
+               'eta', 'theta', 'iota', 'kappa', 'lambda', 'mu', 'nu',
+               'xi', 'omicron', 'pi', 'rho', 'sigma', 'tau', 'upsilon',
+               'phi', 'chi', 'psi', 'omega'] ]),
+    [ '[ [ "alpha", "beta", "gamma", "delta", "epsilon", "zeta", "eta",',
+      '    "theta", "iota", "kappa", "lambda", "mu", "nu", "xi", "omicron",',
+      '    "pi", "rho", "sigma", "tau", "upsilon", "phi", "chi", "psi",',
+      '    "omega" ] ]' ].join('\n'),
+    'wraps long inline arrays')
+
   test.end() })
