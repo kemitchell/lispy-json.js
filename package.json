@@ -5,6 +5,7 @@
   "author": "Kyle E. Mitchell <kyle@kemitchell.com> (https://kemitchell.com/)",
   "bin": "command-line-interface.js",
   "devDependencies": {
+    "glob": "~5.0.14",
     "tape": "4.x"
   },
   "keywords": [
