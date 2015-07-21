@@ -3,7 +3,7 @@
   "description": "Lispy style JSON serialization",
   "version": "1.1.1",
   "author": "Kyle E. Mitchell <kyle@kemitchell.com> (https://kemitchell.com/)",
-  "bin": "command-line-interface.js",
+  "bin": "lispy-json",
   "devDependencies": {
     "glob": "~5.0.14",
     "tape": "4.x"
@@ -22,5 +22,8 @@
   "repository": "kemitchell/lispy-json.js",
   "scripts": {
     "test": "tape test.js"
+  },
+  "dependencies": {
+    "stdin-transform-cli": "~1.0.4"
   }
 }
