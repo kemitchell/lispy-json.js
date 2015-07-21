@@ -25,6 +25,72 @@ function isArrayOfScalars(array) {
       type === 'boolean' ||
       element === null ) }) }
 
+function formatArray(depth, flush, argument, MAX_WIDTH) {
+  if (argument.length === 0) {
+    return '[ ]' }
+  else {
+    var stringified = argument.map(function(element) {
+      return lispyJSON(depth + 1, true, element, MAX_WIDTH) || 'null' })
+    var leadingSpaces = indent(depth + 1)
+    var singleLineLength = (
+      leadingSpaces +
+      stringified.reduce(function(length, element) {
+        return length + element.length
+      }, 0))
+    var fitsOnSingleLine = singleLineLength < MAX_WIDTH
+    if (isArrayOfScalars(argument)) {
+      if (fitsOnSingleLine || stringified.length === 1) {
+        return ( '[ ' + stringified.join(', ') + ' ]' ) }
+      else { // 2 or more elements
+        var anyTooLong = stringified.some(function(element) {
+          return ( leadingSpaces + 1 + element.length ) > MAX_WIDTH })
+        return (
+          '[' +
+          ( ( anyTooLong && !flush ) ? '\n' + leadingSpaces : ' ' ) +
+          stringified.reduce(function(lines, element) {
+            if (lines.length === 0) {
+              return [ [ element ] ] }
+            else {
+              var lastLine = lines[lines.length - 1]
+              var lastStringLength = lastLine.reduce(
+                function(total, element) { return total + element.length },
+                0) +
+                ( ( lastLine.length - 1 ) * 2 )
+              // Too long for the line
+              if (( leadingSpaces.length + lastStringLength + element.length + 2 ) >= MAX_WIDTH) {
+                lines.push([ element ]) }
+              // Fits on the last line
+              else {
+                lastLine.push(element) }
+              return lines }
+          }, [ ])
+            .map(function(line) { return line.join(', ') })
+            .join(',\n' + leadingSpaces) +
+          ' ]') } }
+    else {
+      return (
+        '[' +
+        (flush ? ' ' : '\n' + leadingSpaces) +
+        stringified.join(',\n' + leadingSpaces) +
+        ' ]' ) } } }
+
+function formatObject(depth, flush, argument, MAX_WIDTH) {
+  var properties = new Array
+  for (var key in argument) {
+    if (argument.hasOwnProperty(key)) {
+      var value = lispyJSON(
+        depth + 1, false, argument[key], MAX_WIDTH)
+      if (value) {
+        properties.push(JSON.stringify(key) + ': ' + value) } } }
+  if (properties.length === 0) {
+    return '{ }' }
+  else {
+    return (
+      '{' +
+      (flush ? ' ' : '\n' + indent(depth + (flush ? 2 : 1))) +
+      properties.join(',\n' + indent(depth + 1)) +
+      ' }' ) } }
+
 function lispyJSON(depth, flush, argument, MAX_WIDTH) {
   MAX_WIDTH = MAX_WIDTH || 72
   var type = typeof argument
@@ -39,70 +105,8 @@ function lispyJSON(depth, flush, argument, MAX_WIDTH) {
       return 'null' }
     else {
       if (Array.isArray(argument)) {
-        var stringified = argument.map(function(element) {
-          return lispyJSON(depth + 1, true, element, MAX_WIDTH) || 'null' })
-        if (stringified.length === 0) {
-          return '[ ]' }
-        else {
-          var leadingSpaces = indent(depth + 1)
-          var singleLineLength = (
-            leadingSpaces +
-            stringified.reduce(function(length, element) {
-              return length + element.length
-            }, 0))
-          var fitsOnSingleLine = singleLineLength < MAX_WIDTH
-          if (isArrayOfScalars(argument)) {
-            if (argument.length === 1) {
-              return ( '[ ' + stringified[0] + ' ]' ) }
-            else {
-              var lastStringified = stringified.length - 1
-              var rows = stringified.reduce(function(rows, string, index) {
-                var lastRowIndex = rows.length - 1
-                var lastRow = rows[lastRowIndex]
-                var isLast = index === lastStringified
-                var comma = (isLast ? '' : ',')
-                var additionalLength = string.length + comma.length + 1
-                if (( leadingSpaces.length +
-                      lastRow.length +
-                      additionalLength ) > MAX_WIDTH ) {
-                  rows.push(' ' + string + comma) }
-                else {
-                  rows[lastRowIndex] = (
-                    lastRow +
-                    ( lastRow.length > 0 ? ' ' : '' ) +
-                    string +
-                    comma )}
-                return rows
-              }, [ '' ])
-              return (
-                '[' +
-                ( ( fitsOnSingleLine || flush ) ?
-                  ' ' : ( '\n' + leadingSpaces ) ) +
-                rows
-                  .map(function(x) { return x.trim() })
-                  .join('\n' + leadingSpaces) +
-                ' ]' ) } }
-          else {
-            return (
-              '[' +
-              (flush ? ' ' : '\n' + leadingSpaces) +
-              stringified.join(',\n' + leadingSpaces) +
-              ' ]' ) } } }
+        return formatArray(depth, flush, argument, MAX_WIDTH) }
       else { // object
-        var properties = new Array
-        for (var key in argument) {
-          if (argument.hasOwnProperty(key)) {
-            var value = lispyJSON(
-              depth + 1, false, argument[key], MAX_WIDTH)
-            if (value) {
-              properties.push(JSON.stringify(key) + ': ' + value) } } }
-        if (properties.length === 0) {
-          return '{ }' }
-        else {
-          return (
-            '{' +
-            (flush ? ' ' : '\n' + indent(depth + (flush ? 2 : 1))) +
-            properties.join(',\n' + indent(depth + 1)) +
-            ' }' ) } } } } }
+        return formatObject(depth, flush, argument, MAX_WIDTH) } } } }
 
 module.exports = lispyJSON.bind(this, 0, true)
