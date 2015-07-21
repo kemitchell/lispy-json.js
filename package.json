@@ -1,7 +1,7 @@
 {
   "name": "lispy-json",
   "description": "Lispy style JSON serialization",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author": "Kyle E. Mitchell <kyle@kemitchell.com> (https://kemitchell.com/)",
   "bin": "lispy-json",
   "devDependencies": {
