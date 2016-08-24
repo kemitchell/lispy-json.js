@@ -6,6 +6,7 @@
   "bin": "lispy-json",
   "devDependencies": {
     "glob": "~5.0.14",
+    "standard": "^8.0.0",
     "tape": "4.x"
   },
   "keywords": [
@@ -21,7 +22,8 @@
   "license": "Apache-2.0",
   "repository": "kemitchell/lispy-json.js",
   "scripts": {
-    "test": "tape test.js"
+    "test": "tape test.js",
+    "lint": "standard"
   },
   "dependencies": {
     "stdin-transform-cli": "~1.0.4"

@@ -1,9 +1,12 @@
 ---
-language: "node_js"
+language: node_js
 node_js:
-  - "0.10"
-  - "0.11"
-  - "0.12"
-  - "node"
-  - "iojs"
+- '0.10'
+- '0.11'
+- '0.12'
+- node
+- iojs
 sudo: false
+script:
+- npm test
+- npm run lint

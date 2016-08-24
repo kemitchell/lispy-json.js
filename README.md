@@ -27,5 +27,5 @@ In JavaScript, via [npm](https://npmjs.com):
 ```javascript
 var stringify = require('lispy-json')
 
-console.log(stringify({ an: 'object' }))
+console.log(stringify({an: 'object'}))
 ```
