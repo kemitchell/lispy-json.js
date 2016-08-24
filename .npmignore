@@ -1,5 +1,0 @@
-.npmignore
-.travis.yml
-examples
-node_modules
-test.js
