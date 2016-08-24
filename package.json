@@ -5,7 +5,7 @@
   "author": "Kyle E. Mitchell <kyle@kemitchell.com> (https://kemitchell.com/)",
   "bin": "lispy-json",
   "dependencies": {
-    "stdin-transform-cli": "~1.0.4"
+    "stdin-transform-cli": "^1.0.4"
   },
   "devDependencies": {
     "glob": "^7.0.5",
