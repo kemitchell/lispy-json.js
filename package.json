@@ -4,15 +4,18 @@
   "version": "1.1.2",
   "author": "Kyle E. Mitchell <kyle@kemitchell.com> (https://kemitchell.com/)",
   "bin": "lispy-json",
-  "files": [
-    "index.js",
-    "lispy-json"
-  ],
+  "dependencies": {
+    "stdin-transform-cli": "~1.0.4"
+  },
   "devDependencies": {
     "glob": "~5.0.14",
     "standard": "^8.0.0",
     "tape": "4.x"
   },
+  "files": [
+    "index.js",
+    "lispy-json"
+  ],
   "keywords": [
     "command",
     "filter",
@@ -26,10 +29,7 @@
   "license": "MIT",
   "repository": "kemitchell/lispy-json.js",
   "scripts": {
-    "test": "tape test.js",
-    "lint": "standard"
-  },
-  "dependencies": {
-    "stdin-transform-cli": "~1.0.4"
+    "lint": "standard",
+    "test": "tape test.js"
   }
 }
